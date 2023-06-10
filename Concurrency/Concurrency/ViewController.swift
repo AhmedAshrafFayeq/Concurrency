@@ -14,12 +14,30 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         
 //        createDifferentThreadsType()
-        createDispatchGroupWithEnterAndLeave()
-        
+//        createDispatchGroupWithEnterAndLeave()
+        createQueusAssignedToSpecificDispatchGroup()
         
     }
 }
 
+func createQueusAssignedToSpecificDispatchGroup() {
+    let group = DispatchGroup()
+    
+    DispatchQueue.global(qos: .userInitiated).async(group: group) {
+      print("Current Thread is ", Thread.current)
+      print("Doing some userInitiated work 🤨")
+     }
+    
+    DispatchQueue.global(qos: .userInitiated).async(group: group) {
+        print("Current Thread is ", Thread.current)
+        print("Doing some userInitiated work ⚡️")
+    }
+    
+    group.notify(queue: DispatchQueue.main) {
+        print("finished")
+    }
+
+}
 
 func createDispatchGroupWithEnterAndLeave() {
     let group = DispatchGroup()
