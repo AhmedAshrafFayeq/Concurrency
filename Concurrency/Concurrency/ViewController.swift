@@ -12,11 +12,39 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-
+        
+//        createDifferentThreadsType()
+        createDispatchGroupWithEnterAndLeave()
+        
         
     }
 }
 
+
+func createDispatchGroupWithEnterAndLeave() {
+    let group = DispatchGroup()
+    
+    group.enter()
+    DispatchQueue.global(qos: .userInteractive).async {
+        print("Current Thread is ", Thread.current)
+        print("Hello From first entered queue 🌝")
+        print("----------------------------------------------")
+        group.leave()
+    }
+    
+    group.enter()
+    DispatchQueue.global(qos: .userInteractive).async {
+        print("Current Thread is ", Thread.current)
+        print("Hello From second entered queue 🌚")
+        print("----------------------------------------------")
+        group.leave()
+    }
+    
+    group.notify(queue: DispatchQueue.main) {
+       print("All tasks completed")
+      // Do the work here
+     }
+}
 
 func createDifferentThreadsType() {
     
